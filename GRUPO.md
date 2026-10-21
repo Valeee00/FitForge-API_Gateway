@@ -1,12 +1,11 @@
-# Integrantes do Grupo
+# Integrantes do grupo
 
-| # | Nome completo | RA / Matrícula |
-|---|---------------|----------------|
-| 1 |               |                |
-| 2 |               |                |
-| 3 |               |                |
-| 4 |               |                |
-| 5 |               |                |
+- Andryus Zolet
+- Nicolas Medeiros
+- Valentin Rojas
+- Leonardo Henrique
 
-**Disciplina:** Arquitetura de Soluções
-**Atividade:** Formativa 16 — API Gateway & BFF
+## Trabalho
+
+FitForge — API Gateway e BFF (Spring Cloud Gateway) para os microsserviços do FitForge.
+Atividade Formativa 16 — Arquitetura de Soluções Computacionais.
