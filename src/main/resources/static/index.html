@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FitForge Gateway</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --tx:#1c2430; --mut:#5b6675; --ac:#d9480f; --ok:#1a7f37; --err:#c62828; --bd:#e2e6eb; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#12161c; --card:#1b2129; --tx:#e6eaf0; --mut:#9aa5b4; --ac:#ff8a4c; --ok:#4cc26b; --err:#ff6b6b; --bd:#2a323d; } }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background:var(--bg); color:var(--tx); }
+  main { max-width: 860px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { margin: 0 0 4px; font-size: 1.6rem; }
+  p.sub { margin: 0 0 24px; color: var(--mut); }
+  section { background:var(--card); border:1px solid var(--bd); border-radius:10px; padding:16px 18px; margin-bottom:16px; }
+  h2 { font-size: 1rem; margin: 0 0 10px; }
+  table { width:100%; border-collapse: collapse; font-size: .92rem; }
+  td { padding: 6px 4px; border-top: 1px solid var(--bd); vertical-align: top; }
+  td:first-child { white-space: nowrap; font-family: ui-monospace, Consolas, monospace; }
+  a { color: var(--ac); text-decoration: none; } a:hover { text-decoration: underline; }
+  .up { color: var(--ok); font-weight: 600; } .down { color: var(--err); font-weight: 600; }
+  code { font-family: ui-monospace, Consolas, monospace; }
+</style>
+</head>
+<body>
+<main>
+  <h1>FitForge · API Gateway &amp; BFF</h1>
+  <p class="sub">Camada de interface do backend — ponto único de entrada para os microfrontends.</p>
+
+  <section>
+    <h2>Microsserviços conectados</h2>
+    <table id="status"><tr><td colspan="3">Consultando…</td></tr></table>
+  </section>
+
+  <section>
+    <h2>Rotas do API Gateway (proxy reverso)</h2>
+    <table>
+      <tr><td><a href="api/treinos">/api/treinos/**</a></td><td>→ treinos-service (fichas e exercícios)</td></tr>
+      <tr><td><a href="api/sessoes">/api/sessoes/**</a></td><td>→ progresso-service (sessões de treino)</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Endpoints do BFF</h2>
+    <table>
+      <tr><td><a href="api/bff/dashboard">/api/bff/dashboard</a></td><td>Visão geral: treinos de hoje, semana, uso das fichas, últimas sessões</td></tr>
+      <tr><td><a href="api/bff/treinos/template-a">/api/bff/treinos/{id}</a></td><td>Ficha + histórico de sessões dela</td></tr>
+      <tr><td><a href="api/bff/historico?periodo=semana">/api/bff/historico</a></td><td>Sessões com a situação atual de cada ficha</td></tr>
+      <tr><td><a href="api/bff/status">/api/bff/status</a></td><td>Health check real dos microsserviços</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Documentação e observabilidade</h2>
+    <table>
+      <tr><td><a href="swagger-ui.html">/swagger-ui.html</a></td><td>Swagger UI</td></tr>
+      <tr><td><a href="actuator/gateway/routes">/actuator/gateway/routes</a></td><td>Rotas ativas</td></tr>
+      <tr><td><a href="actuator/health">/actuator/health</a></td><td>Saúde do gateway</td></tr>
+    </table>
+  </section>
+</main>
+<script>
+  fetch('api/bff/status').then(r => r.json()).then(s => {
+    const t = document.getElementById('status');
+    t.innerHTML = '';
+    s.microsservicos.forEach(m => {
+      const tr = document.createElement('tr');
+      const ok = m.status === 'UP';
+      tr.innerHTML = '<td>' + m.servico + '</td><td><code>' + m.url + '</code></td>' +
+        '<td class="' + (ok ? 'up' : 'down') + '">' + m.status + ' (' + m.latenciaMs + ' ms)</td>';
+      t.appendChild(tr);
+    });
+  }).catch(() => {
+    document.getElementById('status').innerHTML = '<tr><td class="down">Não foi possível consultar o status.</td></tr>';
+  });
+</script>
+</body>
+</html>
