@@ -5,7 +5,7 @@ Atividade Formativa 16 — Arquitetura de Soluções Computacionais. Integrantes
 
 ## Endereço publicado
 
-**Aplicativo Web (Azure):** https://PREENCHER.azurewebsites.net
+**Aplicativo Web (Azure):** https://fitforgevalentin.z38.web.core.windows.net/
 
 | O que ver | Caminho |
 |---|---|
@@ -18,7 +18,7 @@ Atividade Formativa 16 — Arquitetura de Soluções Computacionais. Integrantes
 
 | Camada | Repositório |
 |---|---|
-| Frontend (Module Federation) | [Valeee00/FitForge](https://github.com/Valeee00/FitForge) |
+| MicroFrontend | [Valeee00/FitForge](https://github.com/Valeee00/FitForge) |
 | Microsserviços | [Valeee00/FitForge-Microservicos](https://github.com/Valeee00/FitForge-Microservicos) |
 | API Gateway + BFF (este) | [Valeee00/FitForge-API_Gateway](https://github.com/Valeee00/FitForge-API_Gateway) |
 
