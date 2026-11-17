@@ -1,11 +1,9 @@
-package br.fitforge.gateway.bff.dto;
+package br.fitforge.gateway.application.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.math.BigDecimal;
 
 /** Exercício (contrato do treinos-service). */
-@JsonIgnoreProperties(ignoreUnknown = true)
 public record ExerciseDTO(String id, String name, String muscle, int sets, int reps, BigDecimal load, int rest) {
 
     public BigDecimal volume() {

@@ -1,4 +1,4 @@
-package br.fitforge.gateway.config;
+package br.fitforge.gateway.adapter.in.web;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.HttpStatus;

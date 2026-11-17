@@ -1,4 +1,4 @@
-package br.fitforge.gateway.filter;
+package br.fitforge.gateway.infrastructure.observability;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

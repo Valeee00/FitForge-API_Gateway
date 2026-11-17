@@ -1,4 +1,4 @@
-package br.fitforge.gateway.bff.dto;
+package br.fitforge.gateway.application.model;
 
 /**
  * Sessão + situação atual da ficha. Como cada serviço tem seu banco, a ficha

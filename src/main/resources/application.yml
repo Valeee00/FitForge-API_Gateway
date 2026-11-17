@@ -28,13 +28,17 @@ spring:
             allowed-origin-patterns: ${CORS_ORIGINS:http://localhost:*,http://127.0.0.1:*,https://*.azurestaticapps.net,https://*.web.core.windows.net,https://*.azurewebsites.net}
             allowed-methods: [GET, POST, PUT, DELETE, PATCH, OPTIONS]
             allowed-headers: "*"
-            exposed-headers: [X-Correlation-Id, X-Gateway-Route, X-Gateway-Execution-Time-Ms]
+            exposed-headers: [X-Correlation-Id, X-Gateway-Route, X-Gateway-Execution-Time-Ms, Retry-After]
             allow-credentials: false
             max-age: 3600
 
       # Evita headers CORS duplicados quando o microsserviço também responde com CORS
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_FIRST
+        # Segurança: rejeita corpos maiores que 1 MB (HTTP 413)
+        - name: RequestSize
+          args:
+            maxSize: 1048576
 
       # ---------------------------------------------------------------
       # API GATEWAY — Rotas de Proxy Reverso (transparente)
@@ -67,6 +71,20 @@ spring:
                 methods: GET
                 statuses: BAD_GATEWAY, SERVICE_UNAVAILABLE, GATEWAY_TIMEOUT
 
+        # Swagger de cada microsserviço publicado pelo gateway (seletor no Swagger UI)
+        - id: treinos-docs
+          uri: ${services.treinos.url}
+          predicates:
+            - Path=/docs/treinos
+          filters:
+            - SetPath=/v3/api-docs
+        - id: progresso-docs
+          uri: ${services.progresso.url}
+          predicates:
+            - Path=/docs/progresso
+          filters:
+            - SetPath=/v3/api-docs
+
       # Tempo máximo de espera pelos microsserviços (Azure pode ter cold start)
       httpclient:
         connect-timeout: 5000
@@ -85,6 +103,10 @@ services:
 
 app:
   timezone: ${APP_TIMEZONE:America/Sao_Paulo}
+  security:
+    # Vazia = sem exigência de chave (execução local). No Azure: GATEWAY_API_KEY=<valor longo e aleatório>
+    api-key: ${GATEWAY_API_KEY:}
+    rate-limit-per-minute: ${GATEWAY_RATE_LIMIT:120}
 
 springdoc:
   api-docs:
@@ -93,12 +115,19 @@ springdoc:
     path: /swagger-ui.html
     tags-sorter: alpha
     operations-sorter: method
+    urls:
+      - name: "API Gateway & BFF"
+        url: /v3/api-docs
+      - name: "treinos-service (MongoDB)"
+        url: /docs/treinos
+      - name: "progresso-service (Azure SQL)"
+        url: /docs/progresso
 
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,gateway,metrics
+        include: health,info,gateway
   endpoint:
     gateway:
       enabled: true

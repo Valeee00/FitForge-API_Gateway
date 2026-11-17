@@ -4,13 +4,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * FitForge — camada de interface do backend (Atividade 16).
+ * FitForge — API Gateway & BFF (camada de interface do backend).
  *
- * Um único processo exerce dois papéis:
- *  1. API GATEWAY (Spring Cloud Gateway): proxy reverso transparente para os
- *     microsserviços de domínio (rotas declaradas no application.yml).
- *  2. BFF (Backend For Frontend): endpoints /api/bff/** que agregam e moldam
- *     dados de vários microsserviços em uma única resposta para as telas.
+ * Arquitetura Hexagonal (Ports & Adapters):
+ *   application    → BFF (casos de uso + portas para os microsserviços)
+ *   adapter/in/web → controller REST do BFF
+ *   adapter/out    → clientes HTTP reativos (WebClient) dos microsserviços
+ *   infrastructure → segurança (API key, rate limit, headers) e observabilidade (correlation id, logs)
+ *   application.yml→ rotas do Spring Cloud Gateway (proxy reverso do CRUD)
  */
 @SpringBootApplication
 public class GatewayApplication {

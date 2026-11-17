@@ -1,4 +1,4 @@
-package br.fitforge.gateway.bff.dto;
+package br.fitforge.gateway.application.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

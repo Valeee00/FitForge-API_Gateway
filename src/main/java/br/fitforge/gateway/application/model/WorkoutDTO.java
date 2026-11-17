@@ -1,13 +1,13 @@
-package br.fitforge.gateway.bff.dto;
+package br.fitforge.gateway.application.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 /** Ficha de treino (contrato do treinos-service, GET /api/treinos). */
-@JsonIgnoreProperties(ignoreUnknown = true)
-public record WorkoutDTO(String id, String name, String description, List<String> days, List<ExerciseDTO> exercises) {
+public record WorkoutDTO(String id, String name, String description, List<String> days, List<ExerciseDTO> exercises,
+                         int totalSessoes, LocalDate ultimaSessao) {
 
     public List<String> days() {
         return days == null ? List.of() : days;
